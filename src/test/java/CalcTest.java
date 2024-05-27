@@ -51,7 +51,7 @@ public class CalcTest {
         ecalcPage.clickOnDivisionButton();
         ecalcPage.clickOnZeroButton();
         ecalcPage.clickOnEqualsButton();
-        Assert.assertEquals(ecalcPage.getResults(), "1");
+        Assert.assertEquals(ecalcPage.getResults(), "Infinity");
     }
 
     @Test
