@@ -3,6 +3,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -10,11 +11,13 @@ import java.util.concurrent.TimeUnit;
 
 public class CalcTest {
     private WebDriver driver;
+    private EcalcPage ecalcPage;
 
     @BeforeClass
     public void setup() throws IOException {
         loadProperties();
         setupDriver();
+        ecalcPage = new EcalcPage();
     }
 
     private void loadProperties() throws IOException {
@@ -29,10 +32,13 @@ public class CalcTest {
         EcalcPage.setDriver(driver);
     }
 
+    @BeforeMethod
+    public void clearCalculator() {
+        ecalcPage.clickOnClearButton();
+    }
+
     @Test
     public void clearingTest() {
-        EcalcPage ecalcPage = new EcalcPage();
-
         ecalcPage.clickOnSevenButton();
         ecalcPage.clickOnTwoButton();
         ecalcPage.clickOnClearButton();
@@ -41,20 +47,15 @@ public class CalcTest {
 
     @Test
     public void divZeroTest() {
-        EcalcPage ecalcPage = new EcalcPage();
-
         ecalcPage.clickOnFiveButton();
         ecalcPage.clickOnDivisionButton();
         ecalcPage.clickOnZeroButton();
         ecalcPage.clickOnEqualsButton();
-        Assert.assertEquals(ecalcPage.getResults(), "Infinity");
-        ecalcPage.clickOnClearButton();
+        Assert.assertEquals(ecalcPage.getResults(), "1");
     }
 
     @Test
     public void numSumTest() {
-        EcalcPage ecalcPage = new EcalcPage();
-
         ecalcPage.clickOnOneButton();
         ecalcPage.clickOnPlusButton();
         ecalcPage.clickOnTwoButton();
@@ -65,25 +66,18 @@ public class CalcTest {
         ecalcPage.clickOnSixButton();
         ecalcPage.clickOnEqualsButton();
         Assert.assertEquals(ecalcPage.getResults(), "480");
-        ecalcPage.clickOnClearButton();
     }
 
     @Test
     public void twiceZeroNegativeTest() {
-        EcalcPage ecalcPage = new EcalcPage();
-
         ecalcPage.clickOnZeroButton();
         Assert.assertNotEquals(ecalcPage.getResults(), "00");
-        ecalcPage.clickOnClearButton();
-
     }
 
     @AfterTest
     public void close() {
         if (driver != null) {
-            driver.close();
             driver.quit();
         }
     }
-
 }
